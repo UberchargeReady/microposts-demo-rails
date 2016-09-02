@@ -24,6 +24,13 @@ class UsersIndexTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test 'should not index non-activated users' do
+    log_in_as(@admin)
+    @non_admin.update_columns(activated: false, activated_at: nil)
+    get users_path
+    assert_select "a[href=?]", user_path(@non_admin), count: 0
+  end
+
   test "index as non-admin" do
     log_in_as(@non_admin)
     get users_path

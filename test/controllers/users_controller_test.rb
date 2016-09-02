@@ -70,4 +70,11 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to root_url
   end
 
+  test 'should redirect show when trying to access profile of non-activated user' do
+    log_in_as(@user)
+    @other_user.update_columns(activated: false, activated_at: nil)
+    get user_path(@other_user)
+    assert_redirected_to root_url
+  end
+
 end
